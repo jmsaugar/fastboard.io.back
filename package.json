@@ -2,9 +2,12 @@
   "name": "fastboard.io.back",
   "version": "1.0.0",
   "description": "",
+  "private": true,
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start:watch": "webpack --watch",
+    "start:dist": "node dist/bundle.js",
+    "build": "webpack"
   },
   "repository": {
     "type": "git",
@@ -20,6 +23,11 @@
     "socket.io": "^2.3.0"
   },
   "devDependencies": {
+    "@babel/core": "^7.9.0",
+    "@babel/preset-env": "^7.9.0",
+    "babel-loader": "^8.1.0",
+    "nodemon": "^2.0.2",
+    "nodemon-webpack-plugin": "^4.3.1",
     "webpack": "^4.42.1",
     "webpack-cli": "^3.3.11"
   }
