@@ -7,7 +7,8 @@
   "scripts": {
     "start:watch": "webpack --watch",
     "start:dist": "node dist/bundle.js",
-    "build": "webpack"
+    "build": "webpack",
+    "lint": "eslint src/**/*.js"
   },
   "repository": {
     "type": "git",
@@ -26,6 +27,10 @@
     "@babel/core": "^7.9.0",
     "@babel/preset-env": "^7.9.0",
     "babel-loader": "^8.1.0",
+    "eslint": "^6.8.0",
+    "eslint-config-airbnb-base": "^14.1.0",
+    "eslint-plugin-import": "^2.20.2",
+    "eslint-plugin-promise": "^4.2.1",
     "nodemon": "^2.0.2",
     "nodemon-webpack-plugin": "^4.3.1",
     "webpack": "^4.42.1",

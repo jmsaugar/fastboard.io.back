@@ -1,0 +1,14 @@
+{
+  "env": {
+    "node": true
+  },
+  "extends": "airbnb-base",
+  "plugins": ["promise"],
+  "rules": {
+    "key-spacing": ["error", {
+      "align": "colon",
+      "afterColon": true,
+      "beforeColon": true
+    }]
+  }
+}

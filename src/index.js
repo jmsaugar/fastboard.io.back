@@ -1,6 +1,6 @@
 import io from 'socket.io';
 
-const server = io({serveClient: false}); // @todo origins
+const server = io({ serveClient : false }); // @todo origins
 
 server.on('connection', (client) => {
   console.log('!!!.connected');
