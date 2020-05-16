@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/jmsaugar/fastboard.io.back#readme",
   "dependencies": {
+    "dotenv": "^8.2.0",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {

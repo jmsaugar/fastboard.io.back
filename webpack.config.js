@@ -2,25 +2,25 @@ const path = require('path');
 const NodemonPlugin = require('nodemon-webpack-plugin');
 
 module.exports = {
-  target: 'node',
-  entry: './src/index.js',
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'bundle.js'
+  target : 'node',
+  entry  : './src/index.js',
+  output : {
+    path     : path.resolve(__dirname, 'dist'),
+    filename : 'bundle.js',
   },
-  module: {
-    rules: [
+  module : {
+    rules : [
       {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel-loader',
+        test    : /\.js$/,
+        exclude : /node_modules/,
+        loader  : 'babel-loader',
       },
     ],
   },
-  plugins: [
+  plugins : [
     new NodemonPlugin(),
   ],
-  externals: { 
-    uws: 'uws',
+  externals : {
+    uws : 'uws',
   },
 };

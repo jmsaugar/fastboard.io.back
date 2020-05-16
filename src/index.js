@@ -1,9 +1,4 @@
-import io from 'socket.io';
+import { configService, boardsService } from './services';
 
-const server = io({ serveClient : false }); // @todo origins
-
-server.on('connection', (client) => {
-  console.log('!!!.connected');
-});
-
-server.listen(3000);
+configService.init();
+boardsService.init();
