@@ -50,7 +50,8 @@ const getBoardUsers = (boardId) => (
 /**
  * Handler for user join request.
  *
- * @param {*} data { boardId }
+ * @param {Object} socket Socket instance
+ * @param {Object} data { boardId, userName, boardName }
  */
 const onJoin = (socket, { boardId, userName, boardName }) => {
   // @todo if no boardId, etc, answer user with rejection
@@ -82,10 +83,16 @@ const onDisconnect = (socketId) => {
   }
 
   const boardId = socket2board[socketId];
+  const board = boards[boardId];
+
+  if (!board) {
+    return;
+  }
+
   let userId;
 
   // Get user id and remove user from board users list
-  boards[boardId].users = boards[boardId].users.filter((user) => {
+  board.users = board.users.filter((user) => {
     if (user.socketId === socketId) {
       userId = user.id;
       return false;
@@ -94,8 +101,13 @@ const onDisconnect = (socketId) => {
     return true;
   });
 
-  // Tell other users in the board that this user has left
-  server.to(boardId).emit(boardsMessages.otherLeft, { userId });
+  if (board.users.length) {
+    // Tell other users in the board that this user has left
+    server.to(boardId).emit(boardsMessages.otherLeft, { userId });
+  } else {
+    // Remove board in case the last user left
+    delete boards[boardId];
+  }
 
   // Remove socket-board link
   delete socket2board[socketId];
