@@ -147,7 +147,7 @@ const onDrawingEvent = (socketId, event, data) => {
     return;
   }
 
-  socket.to(boardId).emit(event, { userId, data });
+  socket.to(boardId).emit(event, { userId, ...data });
 };
 
 /**
