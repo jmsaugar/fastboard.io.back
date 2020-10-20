@@ -3,10 +3,10 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { boardsMessages } from '../constants';
 
-let server; // Socketio server instance
-const boards = {}; // Object that contains data for boards (including users)
-const socket2board = {}; // Required to keep link between socket.id and board
-const id2socket = {}; // Required to keep link between socket.id and socket object
+let server; // Socketio server instance.
+
+const boards = {}; // boardId : { ...boardData }
+const sockets = {}; // socketId : { boardId, socket }
 
 /**
  * Create a new user and add it to a board.
@@ -18,12 +18,14 @@ const id2socket = {}; // Required to keep link between socket.id and socket obje
  * @param {String} userName Name of the new user.
  */
 const addUserToBoard = (boardId, socket, boardName, userName) => {
+  // Create a new user
   const newUser = {
     id       : uuidv4(),
     name     : userName,
     socketId : socket.id,
   };
 
+  // Add user to the board
   if (!boards[boardId]) {
     boards[boardId] = {
       name         : boardName,
@@ -34,8 +36,8 @@ const addUserToBoard = (boardId, socket, boardName, userName) => {
     boards[boardId].users.push(newUser);
   }
 
-  socket2board[socket.id] = boardId;
-  id2socket[socket.id] = socket;
+  // Update socket associations
+  sockets[socket.id] = { boardId, socket };
 };
 
 /**
@@ -80,11 +82,11 @@ const onJoin = (socket, { boardId, userName, boardName }) => {
  * @param {String} socketId Id of the socket for the disconnected user.
  */
 const onDisconnect = (socketId) => {
-  if (!socket2board[socketId]) {
+  if (!sockets[socketId]) {
     return;
   }
 
-  const boardId = socket2board[socketId];
+  const boardId = sockets[socketId].boardId;
   const board = boards[boardId];
 
   if (!board) {
@@ -111,36 +113,25 @@ const onDisconnect = (socketId) => {
     delete boards[boardId];
   }
 
-  // Remove socket-board link
-  delete socket2board[socketId];
-
-  // Remove socketId-socket link
-  delete id2socket[socketId];
+  // Remove socket associations
+  delete socket[socketId];
 };
 
 const onDrawingEvent = (socketId, event, data) => {
-  if (!socket2board[socketId]) {
+  if (!sockets[socketId]) {
     return;
   }
 
-  const boardId = socket2board[socketId];
+  const boardId = sockets[socketId].boardId;
   const board = boards[boardId];
 
   if (!board) {
     return;
   }
 
-  let userId;
-  board.users = board.users.filter((user) => {
-    if (user.socketId === socketId) {
-      userId = user.id;
-      return false;
-    }
+  const userId = board.users.find((user) => user.socketId === socketId)?.id;
 
-    return true;
-  });
-
-  const socket = id2socket[socketId];
+  const socket = sockets[socketId].socket;
 
   if (!socket) {
     console.log('!!!! @todo ERROR');
