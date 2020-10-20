@@ -86,7 +86,7 @@ const onDisconnect = (socketId) => {
     return;
   }
 
-  const boardId = sockets[socketId].boardId;
+  const { boardId } = sockets[socketId];
   const board = boards[boardId];
 
   if (!board) {
@@ -114,7 +114,7 @@ const onDisconnect = (socketId) => {
   }
 
   // Remove socket associations
-  delete socket[socketId];
+  delete sockets[socketId];
 };
 
 const onDrawingEvent = (socketId, event, data) => {
@@ -122,7 +122,7 @@ const onDrawingEvent = (socketId, event, data) => {
     return;
   }
 
-  const boardId = sockets[socketId].boardId;
+  const { boardId } = sockets[socketId];
   const board = boards[boardId];
 
   if (!board) {
@@ -131,7 +131,7 @@ const onDrawingEvent = (socketId, event, data) => {
 
   const userId = board.users.find((user) => user.socketId === socketId)?.id;
 
-  const socket = sockets[socketId].socket;
+  const { socket } = sockets[socketId];
 
   if (!socket) {
     console.log('!!!! @todo ERROR');
