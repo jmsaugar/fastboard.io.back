@@ -50,23 +50,24 @@ function getBoardUsers(boardId) {
  *
  * @param {Object} socket Socket instance
  * @param {Object} data { boardId, userName, boardName }
+ * @param {Function} ack Callback to acknowledge the join request
  */
-function onJoin(socket, { boardId, userName, boardName }) {
+function onJoin(socket, { boardId, userName, boardName }, ack) {
   // @todo if no boardId, etc, answer user with rejection
   socket.join(boardId, () => {
     // @todo same with userName?
     if (!boardId) {
-      return;
+      return ack(false);
     }
 
     // Confirm the user he has joined the room
-    socket.emit(boardsMessages.meJoined, { boardId, users : getBoardUsers.call(this, boardId) });
+    ack(true, { boardId, users : getBoardUsers.call(this, boardId) });
 
     // Add new user to board (also creating board if it does not exist)
     addUserToBoard.call(this, boardId, socket, boardName, userName);
 
     // Tell all other room users that a new user has connected to the room
-    socket.to(boardId).emit(boardsMessages.otherJoined, { boardId });
+    socket.to(boardId).emit(boardsMessages.didJoin, { boardId });
   });
 }
 
@@ -75,7 +76,7 @@ function onJoin(socket, { boardId, userName, boardName }) {
  *
  * @param {String} socketId Id of the socket for the disconnected user.
  */
-function onDisconnect(socketId) {
+function onDisconnect(socketId) { // @todo ack?
   if (!this.sockets[socketId]) {
     return;
   }
@@ -101,7 +102,7 @@ function onDisconnect(socketId) {
 
   if (board.users.length) {
     // Tell other users in the board that this user has left
-    this.server.to(boardId).emit(boardsMessages.otherLeft, { userId });
+    this.server.to(boardId).emit(boardsMessages.didLeave, { userId });
   } else {
     // Remove board in case the last user left
     delete this.boards[boardId];
@@ -111,7 +112,77 @@ function onDisconnect(socketId) {
   delete this.sockets[socketId];
 }
 
+/**
+ * Set the name of an user.
+ *
+ * @param {String} socketId Id of the socket for user setting his name
+ * @param {String} userName New name for the user
+ * @param {Function} ack Callback to acknowledge the request
+ */
+function onSetUserName(socketId, userName, ack) {
+  if (!this.sockets[socketId]) {
+    return ack(false);
+  }
+
+  const { boardId } = this.sockets[socketId];
+  const board = this.boards[boardId];
+
+  if (!board) {
+    return ack(false);
+  }
+
+  const user = board.users.find((u) => u.socketId === socketId);
+
+  const { socket } = this.sockets[socketId];
+
+  if (!socket || !user) {
+    return ack(false);
+  }
+
+  user.name = userName;
+
+  // Tell all other room users that another user has changed his name
+  socket.to(boardId).emit(boardsMessages.didSetUserName, { userId : user.id, userName });
+
+  return ack(true);
+}
+
+/**
+ * Set the name of a board.
+ *
+ * @param {String} socketId Id of the socket for user setting the board name
+ * @param {String} boardName New name for the board
+ * @param {Function} ack Callback to acknowledge the request
+ */
+function onSetBoardName(socketId, boardName, ack) {
+  if (!this.sockets[socketId]) {
+    return ack(false);
+  }
+
+  const { boardId } = this.sockets[socketId];
+  const board = this.boards[boardId];
+
+  if (!board) {
+    return ack(false);
+  }
+
+  const { socket } = this.sockets[socketId];
+
+  if (!socket) {
+    return ack(false);
+  }
+
+  board.name = boardName;
+
+  // Tell all other room users that the board name has been changed
+  socket.to(boardId).emit(boardsMessages.didSetBoardName, { boardId, boardName });
+
+  return ack(true);
+}
+
 export {
   onJoin,
   onDisconnect,
+  onSetUserName,
+  onSetBoardName,
 };

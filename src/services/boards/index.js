@@ -1,6 +1,6 @@
 import io from 'socket.io';
 
-import { onJoin, onDisconnect } from './users';
+import { onJoin, onDisconnect, onSetUserName, onSetBoardName } from './users';
 import { onDrawingEvent } from './drawings';
 
 import { boardsMessages } from '../../constants';
@@ -18,8 +18,12 @@ const init = () => {
   });
 
   server.on('connection', (socket) => {
-    socket.on(boardsMessages.join, onJoin.bind(serviceScope, socket));
+    socket.on(boardsMessages.doJoin, onJoin.bind(serviceScope, socket));
     socket.on('disconnect', onDisconnect.bind(serviceScope, socket.id));
+
+    socket.on(boardsMessages.doSetUserName, onSetUserName.bind(serviceScope, socket.id));
+    socket.on(boardsMessages.doSetBoardName, onSetBoardName.bind(serviceScope, socket.id));
+
     socket.on('onMouseDown', onDrawingEvent.bind(serviceScope, socket.id, 'onMouseDown'));
     socket.on('onMouseDrag', onDrawingEvent.bind(serviceScope, socket.id, 'onMouseDrag'));
   });
