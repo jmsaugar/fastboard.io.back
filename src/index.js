@@ -1,4 +1,4 @@
-import { configService, boardsService } from './services';
+import { configService, socketsService } from './services';
 
 configService.init();
-boardsService.init();
+socketsService.init();

@@ -1,69 +1,31 @@
-import { v4 as uuidv4 } from 'uuid';
+import { createBoard, addUserToBoard, getBoardUsers } from './utils';
 
-import { boardsMessages } from '../../constants';
-
-/**
- * Create a new user and add it to a board.
- * If the board does not exist, it is created.
- *
- * @param {String} boardId Id of the board.
- * @param {String} socket Socket for the user.
- * @param {String} boardName Name of the board (in case of board creation).
- * @param {String} userName Name of the new user.
- */
-function addUserToBoard(boardId, socket, boardName, userName) {
-  // Create a new user
-  const newUser = {
-    id       : uuidv4(),
-    name     : userName,
-    socketId : socket.id,
-  };
-
-  // Add user to the board
-  if (!this.boards[boardId]) {
-    this.boards[boardId] = {
-      name         : boardName,
-      creationDate : new Date(),
-      users        : [newUser],
-    };
-  } else {
-    this.boards[boardId].users.push(newUser);
-  }
-
-  // Update socket associations
-  this.sockets[socket.id] = { boardId, socket };
-}
-
-/**
- * Get all users on a given board.
- *
- * @param {String} boardId Id of the board.
- *
- * @return {Array<Object>} Array of users.
- */
-function getBoardUsers(boardId) {
-  return (boardId && this.boards[boardId]) ? this.boards[boardId].users : [];
-}
+import { boardsMessages } from '../../../constants';
 
 /**
  * Handler for user join request.
+ *
+ * If board id is not received, a new
+ * board is created for the user to join.
  *
  * @param {Object} socket Socket instance
  * @param {Object} data { boardId, userName, boardName }
  * @param {Function} ack Callback to acknowledge the join request
  */
-function onJoin(socket, { boardId, userName, boardName }, ack) {
-  // @todo if no boardId, etc, answer user with rejection
+function onJoin(socket, { boardId : receivedBoardId, userName, boardName }, ack) {
+  // @todo check userName and boardName?
+  const boardId = receivedBoardId || createBoard.call(this, boardName);
+
+  if (!boardId) {
+    ack(false);
+    return;
+  }
+
   socket.join(boardId, () => {
-    // @todo same with userName?
-    if (!boardId) {
-      return ack(false);
-    }
-
     // Confirm the user he has joined the room
-    ack(true, { boardId, users : getBoardUsers.call(this, boardId) });
+    ack(true, { boardId, users : getBoardUsers.call(this, boardId) }); // @todo check the order of this
 
-    // Add new user to board (also creating board if it does not exist)
+    // Add new user to board
     addUserToBoard.call(this, boardId, socket, boardName, userName);
 
     // Tell all other room users that a new user has connected to the room
@@ -121,14 +83,16 @@ function onDisconnect(socketId) { // @todo ack?
  */
 function onSetUserName(socketId, userName, ack) {
   if (!this.sockets[socketId]) {
-    return ack(false);
+    ack(false);
+    return;
   }
 
   const { boardId } = this.sockets[socketId];
   const board = this.boards[boardId];
 
   if (!board) {
-    return ack(false);
+    ack(false);
+    return;
   }
 
   const user = board.users.find((u) => u.socketId === socketId);
@@ -136,7 +100,8 @@ function onSetUserName(socketId, userName, ack) {
   const { socket } = this.sockets[socketId];
 
   if (!socket || !user) {
-    return ack(false);
+    ack(false);
+    return;
   }
 
   user.name = userName;
@@ -144,7 +109,7 @@ function onSetUserName(socketId, userName, ack) {
   // Tell all other room users that another user has changed his name
   socket.to(boardId).emit(boardsMessages.didSetUserName, { userId : user.id, userName });
 
-  return ack(true);
+  ack(true);
 }
 
 /**
@@ -156,20 +121,23 @@ function onSetUserName(socketId, userName, ack) {
  */
 function onSetBoardName(socketId, boardName, ack) {
   if (!this.sockets[socketId]) {
-    return ack(false);
+    ack(false);
+    return;
   }
 
   const { boardId } = this.sockets[socketId];
   const board = this.boards[boardId];
 
   if (!board) {
-    return ack(false);
+    ack(false);
+    return;
   }
 
   const { socket } = this.sockets[socketId];
 
   if (!socket) {
-    return ack(false);
+    ack(false);
+    return;
   }
 
   board.name = boardName;
@@ -177,7 +145,7 @@ function onSetBoardName(socketId, boardName, ack) {
   // Tell all other room users that the board name has been changed
   socket.to(boardId).emit(boardsMessages.didSetBoardName, { boardId, boardName });
 
-  return ack(true);
+  ack(true);
 }
 
 export {
