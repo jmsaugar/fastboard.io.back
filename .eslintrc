@@ -11,5 +11,17 @@
       "afterColon": true,
       "beforeColon": true
     }]
+  },
+  "settings": {
+    "import/resolver": {
+      "alias": {
+        "map": [
+          ["#utils", "./src/utils"],
+          ["#constants", "./src/constants"],
+          ["#services", "./src/services"]
+        ]
+      },
+      "extensions": [".js"]
+    }
   }
 }

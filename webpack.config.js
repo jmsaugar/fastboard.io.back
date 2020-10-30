@@ -18,6 +18,14 @@ module.exports = {
       },
     ],
   },
+  resolve : {
+    alias : {
+      '#utils'     : path.resolve(__dirname, 'src/utils/'),
+      '#constants' : path.resolve(__dirname, 'src/constants/'),
+      '#services'  : path.resolve(__dirname, 'src/services/'),
+    },
+    extensions : ['.js'],
+  },
   plugins : [
     new NodemonPlugin(),
   ],

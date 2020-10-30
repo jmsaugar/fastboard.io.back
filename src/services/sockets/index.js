@@ -1,12 +1,12 @@
 import io from 'socket.io';
 
-import { Log } from '../../utils';
+import { Log } from '#utils';
+import { boardsMessages } from '#constants';
+
 import {
   onJoin, onDisconnect, onSetUserName, onSetBoardName,
 } from './boards';
 import { onDrawingEvent } from './drawings';
-
-import { boardsMessages } from '../../constants';
 
 /**
  * Initialize socket.io connection.

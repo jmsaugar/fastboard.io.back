@@ -1,7 +1,6 @@
-import { Log } from './utils';
-import { configService, socketsService } from './services';
-
-import { logPrefix } from './constants';
+import { Log } from '#utils';
+import { logPrefix } from '#constants';
+import { configService, socketsService } from '#services';
 
 Log.init(logPrefix, { all : true }); // @todo read from env
 

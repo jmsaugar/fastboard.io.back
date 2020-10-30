@@ -1,5 +1,5 @@
-import { boardsMessages } from '../../../constants';
-import { Log } from '../../../utils';
+import { Log } from '#utils';
+import { boardsMessages } from '#constants';
 
 import { createBoard, addUserToBoard, getBoardUsers } from './utils';
 

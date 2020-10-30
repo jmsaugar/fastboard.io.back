@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-import { Log } from '../../../utils';
+import { Log } from '#utils';
 
 /**
  * Generate an user id via uuid v4.
