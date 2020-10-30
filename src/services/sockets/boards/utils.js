@@ -1,5 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import { Log } from '../../../utils';
+
 /**
  * Generate an user id via uuid v4.
  *
@@ -23,6 +25,8 @@ function generateBoardId() {
  * @return {Integer} Id of the created board.
  */
 function createBoard(boardName) {
+  Log.info('Service : Sockets : createBoard', { boardName });
+
   const boardId = generateBoardId.call(this);
 
   this.boards[boardId] = {
@@ -30,6 +34,11 @@ function createBoard(boardName) {
     creationDate : new Date(),
     users        : [],
   };
+
+  Log.debug('Service : Sockets : createBoard : created', {
+    boardId,
+    data : this.boards[boardId],
+  });
 
   return boardId;
 }
@@ -42,6 +51,8 @@ function createBoard(boardName) {
  * @param {String} userName Name of the new user.
  */
 function addUserToBoard(boardId, socket, userName) {
+  Log.info('Service : Sockets : addUserToBoard', { boardId, userName });
+
   if (!this.boards[boardId]) {
     return;
   }
@@ -58,6 +69,8 @@ function addUserToBoard(boardId, socket, userName) {
 
   // Update socket associations
   this.sockets[socket.id] = { boardId, socket };
+
+  Log.debug('Service : Sockets : addUserToBoard : added', { boardId, newUser });
 }
 
 /**

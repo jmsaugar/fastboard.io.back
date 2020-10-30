@@ -1,6 +1,7 @@
-import { createBoard, addUserToBoard, getBoardUsers } from './utils';
-
 import { boardsMessages } from '../../../constants';
+import { Log } from '../../../utils';
+
+import { createBoard, addUserToBoard, getBoardUsers } from './utils';
 
 /**
  * Handler for user join request.
@@ -13,6 +14,10 @@ import { boardsMessages } from '../../../constants';
  * @param {Function} ack Callback to acknowledge the join request
  */
 function onJoin(socket, { boardId : receivedBoardId, userName, boardName }, ack) {
+  Log.info('Services : Sockets : onJoin', {
+    socketId : socket.id, receivedBoardId, userName, boardName,
+  });
+
   // @todo check userName and boardName?
   const boardId = receivedBoardId || createBoard.call(this, boardName);
 
@@ -22,6 +27,8 @@ function onJoin(socket, { boardId : receivedBoardId, userName, boardName }, ack)
   }
 
   socket.join(boardId, () => {
+    Log.debug('Services : Sockets : onJoin : joined socket', { boardId });
+
     // Confirm the user he has joined the room
     ack(true, { boardId, users : getBoardUsers.call(this, boardId) }); // @todo check the order of this
 
@@ -39,6 +46,8 @@ function onJoin(socket, { boardId : receivedBoardId, userName, boardName }, ack)
  * @param {String} socketId Id of the socket for the disconnected user.
  */
 function onDisconnect(socketId) { // @todo ack?
+  Log.info('Services : Sockets : onDisconnect', { socketId });
+
   if (!this.sockets[socketId]) {
     return;
   }
@@ -82,6 +91,8 @@ function onDisconnect(socketId) { // @todo ack?
  * @param {Function} ack Callback to acknowledge the request
  */
 function onSetUserName(socketId, userName, ack) {
+  Log.info('Services : Sockets : onSetUserName', { socketId, userName });
+
   if (!this.sockets[socketId]) {
     ack(false);
     return;
@@ -120,6 +131,8 @@ function onSetUserName(socketId, userName, ack) {
  * @param {Function} ack Callback to acknowledge the request
  */
 function onSetBoardName(socketId, boardName, ack) {
+  Log.info('Services : Sockets : onSetBoardName', { socketId, boardName });
+
   if (!this.sockets[socketId]) {
     ack(false);
     return;

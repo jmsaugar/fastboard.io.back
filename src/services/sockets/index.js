@@ -1,5 +1,6 @@
 import io from 'socket.io';
 
+import { Log } from '../../utils';
 import {
   onJoin, onDisconnect, onSetUserName, onSetBoardName,
 } from './boards';
@@ -11,8 +12,9 @@ import { boardsMessages } from '../../constants';
  * Initialize socket.io connection.
  */
 const init = () => {
-  const server = io({ serveClient : false }); // @todo origins
+  Log.info('Service : Boards : init');
 
+  const server = io({ serveClient : false }); // @todo origins
   const serviceScope = Object.freeze({
     server, // Socketio server instance.
     boards  : {}, // boardId -> { ...boardData }
@@ -20,6 +22,8 @@ const init = () => {
   });
 
   server.on('connection', (socket) => {
+    Log.info('Service : Boards : init : connection', { socketId : socket.id });
+
     // Boards
     socket.on(boardsMessages.doJoin, onJoin.bind(serviceScope, socket));
     socket.on('disconnect', onDisconnect.bind(serviceScope, socket.id));
@@ -31,6 +35,7 @@ const init = () => {
     socket.on('onMouseDrag', onDrawingEvent.bind(serviceScope, socket.id, 'onMouseDrag'));
   });
 
+  Log.info('Service : Boards : init : listen');
   server.listen(process.env.SOCKETIO_PORT);
 };
 
