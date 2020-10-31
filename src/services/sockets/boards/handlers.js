@@ -33,7 +33,7 @@ function onJoin(socket, { boardId : receivedBoardId, userName, boardName }, ack)
     ack(true, { boardId, users : getBoardUsers.call(this, boardId) }); // @todo check the order of this
 
     // Add new user to board
-    addUserToBoard.call(this, boardId, socket, boardName, userName);
+    addUserToBoard.call(this, boardId, socket, userName);
 
     // Tell all other room users that a new user has connected to the room
     socket.to(boardId).emit(boardsMessages.didJoin, { boardId });
