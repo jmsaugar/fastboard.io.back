@@ -1,1 +1,3 @@
-export { onDrawingEvent } from './handlers';
+export {
+  onSetTool,
+} from './handlers';

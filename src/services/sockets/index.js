@@ -1,12 +1,14 @@
 import io from 'socket.io';
 
 import { Log } from '#utils';
-import { boardsMessages } from '#constants';
+import { boardsMessages, drawingsMessages } from '#constants';
 
 import {
   onJoin, onDisconnect, onSetUserName, onSetBoardName,
 } from './boards';
-import { onDrawingEvent } from './drawings';
+import {
+  onSetTool,
+} from './drawings';
 
 /**
  * Initialize socket.io connection.
@@ -31,8 +33,9 @@ const init = () => {
     socket.on(boardsMessages.doSetBoardName, onSetBoardName.bind(serviceScope, socket.id));
 
     // Drawings
-    socket.on('onMouseDown', onDrawingEvent.bind(serviceScope, socket.id, 'onMouseDown'));
-    socket.on('onMouseDrag', onDrawingEvent.bind(serviceScope, socket.id, 'onMouseDrag'));
+    socket.on(drawingsMessages.doSetTool, onSetTool.bind(serviceScope, socket.id));
+    // socket.on('onMouseDown', onDrawingEvent.bind(serviceScope, socket.id, 'onMouseDown'));
+    // socket.on('onMouseDrag', onDrawingEvent.bind(serviceScope, socket.id, 'onMouseDrag'));
   });
 
   Log.info('Service : Boards : init : listen');
