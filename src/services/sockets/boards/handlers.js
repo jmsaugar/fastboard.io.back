@@ -1,5 +1,5 @@
 import { Log } from '#utils';
-import { boardsMessages } from '#constants';
+import { boardsMessages, boardsErrors } from '#constants';
 
 import { createBoard, addUserToBoard, getBoardUsers } from './utils';
 
@@ -22,7 +22,16 @@ function onJoin(socket, { boardId : receivedBoardId, userName, boardName }, ack)
   const boardId = receivedBoardId || createBoard.call(this, boardName);
 
   if (!boardId) {
-    ack(false);
+    Log.error('Services : Sockets : onJoin : no board id');
+
+    ack(false, { errorCode : boardsErrors.generic }); // @todo error payload generator?
+    return;
+  }
+
+  if (!this.boards[boardId]) {
+    Log.error('Services : Sockets : onJoin : no board exists with such id', { boardId });
+
+    ack(false, { errorCode : boardsErrors.noBoard });
     return;
   }
 
@@ -35,12 +44,18 @@ function onJoin(socket, { boardId : receivedBoardId, userName, boardName }, ack)
     if (!user) {
       Log.error('Services : Sockets : onJoin : user not added to board', { boardId, userName });
 
-      ack(false);
+      ack(false, boardsErrors.generic);
       return;
     }
 
     // Confirm the user he has joined the room
-    ack(true, { boardId, users : getBoardUsers.call(this, boardId) });
+    ack(true, {
+      boardId,
+      boardName : this.boards[boardId]?.name,
+      users     : getBoardUsers.call(this, boardId).filter(
+        ({ socketId }) => socketId !== socket.id,
+      ),
+    });
 
     // Tell all other room users that a new user has connected to the room
     socket.to(boardId).emit(boardsMessages.didJoin, { userId : user.id, userName });
