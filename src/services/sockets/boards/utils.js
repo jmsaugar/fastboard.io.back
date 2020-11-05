@@ -49,12 +49,14 @@ function createBoard(boardName) {
  * @param {String} boardId Id of the board.
  * @param {String} socket Socket for the user.
  * @param {String} userName Name of the new user.
+ *
+ * @return {Object} New user { id, name, socketId }.
  */
 function addUserToBoard(boardId, socket, userName) {
   Log.info('Service : Sockets : addUserToBoard', { boardId, userName });
 
   if (!this.boards[boardId]) {
-    return;
+    return undefined;
   }
 
   // Create a new user
@@ -71,6 +73,8 @@ function addUserToBoard(boardId, socket, userName) {
   this.sockets[socket.id] = { boardId, socket };
 
   Log.debug('Service : Sockets : addUserToBoard : added', { boardId, newUser });
+
+  return newUser;
 }
 
 /**

@@ -29,14 +29,21 @@ function onJoin(socket, { boardId : receivedBoardId, userName, boardName }, ack)
   socket.join(boardId, () => {
     Log.debug('Services : Sockets : onJoin : joined socket', { boardId });
 
-    // Confirm the user he has joined the room
-    ack(true, { boardId, users : getBoardUsers.call(this, boardId) }); // @todo check the order of this
-
     // Add new user to board
-    addUserToBoard.call(this, boardId, socket, userName);
+    const user = addUserToBoard.call(this, boardId, socket, userName);
+
+    if (!user) {
+      Log.error('Services : Sockets : onJoin : user not added to board', { boardId, userName });
+
+      ack(false);
+      return;
+    }
+
+    // Confirm the user he has joined the room
+    ack(true, { boardId, users : getBoardUsers.call(this, boardId) });
 
     // Tell all other room users that a new user has connected to the room
-    socket.to(boardId).emit(boardsMessages.didJoin, { boardId });
+    socket.to(boardId).emit(boardsMessages.didJoin, { userId : user.id, userName });
   });
 }
 
