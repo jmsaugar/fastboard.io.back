@@ -4,41 +4,57 @@ import { Log } from '#utils';
 import { boardsMessages, drawingsMessages } from '#constants';
 
 import {
-  onJoin, onDisconnect, onSetUserName, onSetBoardName,
-} from './boards';
-import {
-  onSetTool,
-} from './drawings';
+  onCreate,
+  onJoin,
+  onDisconnect,
+  onSetUserName,
+  onSetBoardName,
+  onDrawingMessage,
+} from './handlers';
 
 /**
- * Initialize socket.io connection.
+ * Socket.io disconnect event.
+ *
+ * @see https://socket.io/docs/client-api/#Event-%E2%80%98disconnect%E2%80%99
  */
+const socketDisconnect = 'disconnect';
+
 const init = () => {
-  Log.info('Service : Boards : init');
+  Log.info('Service : Realtime : init');
 
   const server = io({ serveClient : false }); // @todo origins
+
   const serviceScope = Object.freeze({
     server, // Socketio server instance.
-    boards  : {}, // boardId -> { ...boardData }
     sockets : {}, // socketId -> { boardId, socket }
   });
 
   server.on('connection', (socket) => {
-    Log.info('Service : Boards : init : connection', { socketId : socket.id });
+    Log.info('Service : Realtime : init : connection', { socketId : socket.id });
 
     // Boards
+    socket.on(socketDisconnect, onDisconnect.bind(serviceScope, socket.id));
+    socket.on(boardsMessages.doCreate, onCreate.bind(serviceScope, socket));
     socket.on(boardsMessages.doJoin, onJoin.bind(serviceScope, socket));
-    socket.on('disconnect', onDisconnect.bind(serviceScope, socket.id));
     socket.on(boardsMessages.doSetUserName, onSetUserName.bind(serviceScope, socket.id));
     socket.on(boardsMessages.doSetBoardName, onSetBoardName.bind(serviceScope, socket.id));
 
     // Drawings
-    socket.on(drawingsMessages.doSetTool, onSetTool.bind(serviceScope, socket.id));
-    // socket.on('onMouseDown', onDrawingEvent.bind(serviceScope, socket.id, 'onMouseDown'));
-    // socket.on('onMouseDrag', onDrawingEvent.bind(serviceScope, socket.id, 'onMouseDrag'));
+    socket.on(
+      drawingsMessages.doMouseDown,
+      onDrawingMessage.bind(serviceScope, socket.id, drawingsMessages.didMouseDown),
+    );
+    socket.on(
+      drawingsMessages.doMouseDrag,
+      onDrawingMessage.bind(serviceScope, socket.id, drawingsMessages.didMouseDrag),
+    );
+    socket.on(
+      drawingsMessages.doSetTool,
+      onDrawingMessage.bind(serviceScope, socket.id, drawingsMessages.didSetTool),
+    );
   });
 
-  Log.info('Service : Boards : init : listen');
+  Log.info('Service : Realtime : init : listen');
   server.listen(process.env.SOCKETIO_PORT);
 };
 
