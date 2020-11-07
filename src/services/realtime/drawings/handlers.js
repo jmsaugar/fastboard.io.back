@@ -26,7 +26,7 @@ function onDrawingEvent(socketId, event, data) {
 }
 
 function onSetTool(socketId, { tool }) {
-  Log.info('Services : sockets : onSetTool', { socketId, tool });
+  Log.info('Services : Realtime : onSetTool', { socketId, tool });
 
   if (!this.sockets[socketId]) {
     return;

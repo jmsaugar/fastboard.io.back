@@ -1,2 +1,2 @@
-export { default as socketsService } from './sockets';
+export { default as realtimeService } from './realtime';
 export { default as configService } from './config';

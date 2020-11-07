@@ -14,7 +14,7 @@ import { createBoard, addUserToBoard, getBoardUsers } from './utils';
  * @param {Function} ack Callback to acknowledge the join request
  */
 function onJoin(socket, { boardId : receivedBoardId, userName, boardName }, ack) {
-  Log.info('Services : Sockets : onJoin', {
+  Log.info('Services : Realtime : onJoin', {
     socketId : socket.id, receivedBoardId, userName, boardName,
   });
 
@@ -22,27 +22,27 @@ function onJoin(socket, { boardId : receivedBoardId, userName, boardName }, ack)
   const boardId = receivedBoardId || createBoard.call(this, boardName);
 
   if (!boardId) {
-    Log.error('Services : Sockets : onJoin : no board id');
+    Log.error('Services : Realtime : onJoin : no board id');
 
     ack(false, { errorCode : boardsErrors.generic }); // @todo error payload generator?
     return;
   }
 
   if (!this.boards[boardId]) {
-    Log.error('Services : Sockets : onJoin : no board exists with such id', { boardId });
+    Log.error('Services : Realtime : onJoin : no board exists with such id', { boardId });
 
     ack(false, { errorCode : boardsErrors.noBoard });
     return;
   }
 
   socket.join(boardId, () => {
-    Log.debug('Services : Sockets : onJoin : joined socket', { boardId });
+    Log.debug('Services : Realtime : onJoin : joined socket', { boardId });
 
     // Add new user to board
     const user = addUserToBoard.call(this, boardId, socket, userName);
 
     if (!user) {
-      Log.error('Services : Sockets : onJoin : user not added to board', { boardId, userName });
+      Log.error('Services : Realtime : onJoin : user not added to board', { boardId, userName });
 
       ack(false, boardsErrors.generic);
       return;
@@ -68,7 +68,7 @@ function onJoin(socket, { boardId : receivedBoardId, userName, boardName }, ack)
  * @param {String} socketId Id of the socket for the disconnected user.
  */
 function onDisconnect(socketId) { // @todo ack?
-  Log.info('Services : Sockets : onDisconnect', { socketId });
+  Log.info('Services : Realtime : onDisconnect', { socketId });
 
   if (!this.sockets[socketId]) {
     return;
@@ -113,7 +113,7 @@ function onDisconnect(socketId) { // @todo ack?
  * @param {Function} ack Callback to acknowledge the request
  */
 function onSetUserName(socketId, userName, ack) {
-  Log.info('Services : Sockets : onSetUserName', { socketId, userName });
+  Log.info('Services : Realtime : onSetUserName', { socketId, userName });
 
   if (!this.sockets[socketId]) {
     ack(false);
@@ -153,7 +153,7 @@ function onSetUserName(socketId, userName, ack) {
  * @param {Function} ack Callback to acknowledge the request
  */
 function onSetBoardName(socketId, boardName, ack) {
-  Log.info('Services : Sockets : onSetBoardName', { socketId, boardName });
+  Log.info('Services : Realtime : onSetBoardName', { socketId, boardName });
 
   if (!this.sockets[socketId]) {
     ack(false);
