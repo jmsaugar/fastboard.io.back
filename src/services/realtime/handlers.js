@@ -220,11 +220,11 @@ function onSetBoardName(socketId, boardName, ack) {
 /**
  * Handler for any drawing message.
  *
- * @param {String} responseMessage Message type to be sent to the rest of users in the board.
  * @param {String} socketId Socket id for the user sending the drawing message.
+ * @param {String} responseMessage Message type to be sent to the rest of users in the board.
  * @param {Object} data Data to be sent to the rest of users in the board.
  */
-function onDrawingMessage(responseMessage, socketId, data) {
+function onDrawingMessage(socketId, responseMessage, data) {
   Log.debug('Service : Realtime : onDrawingMessage', { responseMessage, socketId, data });
 
   if (!this.sockets[socketId]) {
