@@ -253,6 +253,8 @@ function onDrawingMessage(socketId, responseMessage, data) {
   }
 
   socket.to(boardId).emit(responseMessage, { userId, ...data });
+
+  // @todo ack?
 }
 
 export {
