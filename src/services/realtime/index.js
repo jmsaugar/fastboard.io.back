@@ -48,6 +48,10 @@ const init = () => {
       drawingsMessages.doMouseDrag,
       onDrawingMessage.bind(serviceScope, socket.id, drawingsMessages.didMouseDrag),
     );
+    socket.on(
+      drawingsMessages.doKeyDown,
+      onDrawingMessage.bind(serviceScope, socket.id, drawingsMessages.didKeyDown),
+    );
   });
 
   Log.info('Service : Realtime : init : listen');
