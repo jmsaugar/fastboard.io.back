@@ -52,6 +52,10 @@ const init = () => {
       drawingsMessages.doKeyDown,
       onDrawingMessage.bind(serviceScope, socket.id, drawingsMessages.didKeyDown),
     );
+    socket.on(
+      drawingsMessages.doAddImage,
+      onDrawingMessage.bind(serviceScope, socket.id, drawingsMessages.didAddImage),
+    );
   });
 
   Log.info('Service : Realtime : init : listen');

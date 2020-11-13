@@ -5,4 +5,6 @@ export default Object.freeze({
   didMouseDrag : 'didMouseDrag',
   doKeyDown    : 'doKeyDown',
   didKeyDown   : 'didKeyDown',
+  doAddImage   : 'doAddImage',
+  didAddImage  : 'didAddImage',
 });
