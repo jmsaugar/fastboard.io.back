@@ -7,11 +7,11 @@ const colors = Object.freeze({
 
 let prefix;
 let config = {
-  all     : false,
+  all     : true,
   info    : true,
-  warning : false,
-  error   : false,
-  debug   : false,
+  warning : true,
+  error   : true,
+  debug   : true,
 };
 
 /**
