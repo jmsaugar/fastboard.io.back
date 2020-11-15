@@ -1,9 +1,7 @@
 import io from 'socket.io';
 
 import { Log } from '#utils';
-import {
-  boardsMessages, drawingsMessages, socketIOMessages, socketIOOrigin,
-} from '#constants';
+import { boardsMessages, drawingsMessages, socketIOMessages } from '#constants';
 
 import {
   onCreate,
@@ -21,7 +19,7 @@ const init = () => {
     process.env.SOCKETIO_PORT, {
       serveClient : false,
       cors        : {
-        origin      : socketIOOrigin,
+        origin      : process.env.FRONT_HOST,
         credentials : true,
       },
     },
