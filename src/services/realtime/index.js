@@ -1,7 +1,7 @@
 import io from 'socket.io';
 
 import { Log } from '#utils';
-import { boardsMessages, drawingsMessages } from '#constants';
+import { boardsMessages, drawingsMessages, socketIOMessages } from '#constants';
 
 import {
   onCreate,
@@ -11,13 +11,6 @@ import {
   onSetBoardName,
   onDrawingMessage,
 } from './handlers';
-
-/**
- * Socket.io disconnect event.
- *
- * @see https://socket.io/docs/client-api/#Event-%E2%80%98disconnect%E2%80%99
- */
-const socketDisconnect = 'disconnect';
 
 const init = () => {
   Log.info('Service : Realtime : init');
@@ -29,11 +22,11 @@ const init = () => {
     sockets : {}, // socketId -> { boardId, socket }
   });
 
-  server.on('connection', (socket) => {
+  server.on(socketIOMessages.connection, (socket) => {
     Log.info('Service : Realtime : init : connection', { socketId : socket.id });
 
     // Boards
-    socket.on(socketDisconnect, onDisconnect.bind(serviceScope, socket.id));
+    socket.on(socketIOMessages.disconnetion, onDisconnect.bind(serviceScope, socket.id));
     socket.on(boardsMessages.doCreate, onCreate.bind(serviceScope, socket));
     socket.on(boardsMessages.doJoin, onJoin.bind(serviceScope, socket));
     socket.on(boardsMessages.doSetUserName, onSetUserName.bind(serviceScope, socket.id));
