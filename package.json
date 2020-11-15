@@ -8,7 +8,9 @@
     "start:watch": "webpack --watch",
     "start:dist": "node dist/bundle.js",
     "build": "webpack",
-    "lint": "eslint src/**/*.js"
+    "lint": "eslint src/**/*.js",
+    "clean": "rm -rf ./dist",
+    "ci": "yarn clean && yarn install --frozen-lockfile && yarn lint && yarn build"
   },
   "repository": {
     "type": "git",
