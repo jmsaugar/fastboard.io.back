@@ -27,27 +27,27 @@ function onCreate(socket, { boardName, userName }, ack) {
     return;
   }
 
-  socket.join(boardId, () => {
-    Log.debug('Services : Realtime : onCreate : joined socket', { boardId });
+  socket.join(boardId);
 
-    // Add new user to board
-    const user = boardsService.addUser(boardId, userName, socket.id);
+  Log.debug('Services : Realtime : onCreate : socket joined board', { boardId });
 
-    if (!user) {
-      Log.error('Services : Realtime : onCreate : user not added to board', { boardId, userName });
+  // Add new user to board
+  const user = boardsService.addUser(boardId, userName, socket.id);
 
-      // @todo remove board?
+  if (!user) {
+    Log.error('Services : Realtime : onCreate : user not added to board', { boardId, userName });
 
-      ack(false, boardsErrors.generic);
-      return;
-    }
+    // @todo remove board?
 
-    // Update socket associations
-    this.sockets[socket.id] = { boardId, socket };
+    ack(false, boardsErrors.generic);
+    return;
+  }
 
-    // Confirm the user he has created and joined the room
-    ack(true, { boardId, boardName });
-  });
+  // Update socket associations
+  this.sockets[socket.id] = { boardId, socket };
+
+  // Confirm the user he has created and joined the room
+  ack(true, { boardId, boardName });
 }
 
 /**
@@ -71,32 +71,32 @@ function onJoin(socket, { boardId, userName }, ack) {
     return;
   }
 
-  socket.join(boardId, () => {
-    Log.debug('Services : Realtime : onJoin : joined socket', { boardId });
+  socket.join(boardId);
 
-    // Add new user to board
-    const user = boardsService.addUser(boardId, userName, socket.id);
+  Log.debug('Services : Realtime : onJoin : socket joined board', { boardId });
 
-    if (!user) {
-      Log.error('Services : Realtime : onJoin : user not added to board', { boardId, userName });
+  // Add new user to board
+  const user = boardsService.addUser(boardId, userName, socket.id);
 
-      ack(false, boardsErrors.generic);
-      return;
-    }
+  if (!user) {
+    Log.error('Services : Realtime : onJoin : user not added to board', { boardId, userName });
 
-    // Update socket associations
-    this.sockets[socket.id] = { boardId, socket };
+    ack(false, boardsErrors.generic);
+    return;
+  }
 
-    // Confirm the user he has joined the room
-    ack(true, {
-      boardId,
-      boardName : board.name,
-      users     : boardsService.getUsers(boardId).filter(({ socketId }) => socketId !== socket.id),
-    });
+  // Update socket associations
+  this.sockets[socket.id] = { boardId, socket };
 
-    // Tell all other room users that a new user has connected to the room
-    socket.to(boardId).emit(boardsMessages.didJoin, { userId : user.id, userName });
+  // Confirm the user he has joined the room
+  ack(true, {
+    boardId,
+    boardName : board.name,
+    users     : boardsService.getUsers(boardId).filter(({ socketId }) => socketId !== socket.id),
   });
+
+  // Tell all other room users that a new user has connected to the room
+  socket.to(boardId).emit(boardsMessages.didJoin, { userId : user.id, userName });
 }
 
 /**

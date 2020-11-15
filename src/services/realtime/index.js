@@ -15,7 +15,15 @@ import {
 const init = () => {
   Log.info('Service : Realtime : init');
 
-  const server = io({ serveClient : false }); // @todo origins
+  const server = io(
+    process.env.SOCKETIO_PORT, {
+      serveClient : false,
+      cors        : {
+        origin      : '*', // @todo set proper origins
+        credentials : true,
+      },
+    },
+  );
 
   const serviceScope = Object.freeze({
     server, // Socketio server instance.
@@ -26,7 +34,7 @@ const init = () => {
     Log.info('Service : Realtime : init : connection', { socketId : socket.id });
 
     // Boards
-    socket.on(socketIOMessages.disconnetion, onDisconnect.bind(serviceScope, socket.id));
+    socket.on(socketIOMessages.disconnection, onDisconnect.bind(serviceScope, socket.id));
     socket.on(boardsMessages.doCreate, onCreate.bind(serviceScope, socket));
     socket.on(boardsMessages.doJoin, onJoin.bind(serviceScope, socket));
     socket.on(boardsMessages.doSetUserName, onSetUserName.bind(serviceScope, socket.id));
@@ -55,8 +63,7 @@ const init = () => {
     );
   });
 
-  Log.info('Service : Realtime : init : listen');
-  server.listen(process.env.SOCKETIO_PORT);
+  Log.info('Service : Realtime : init : listening');
 };
 
 export default {

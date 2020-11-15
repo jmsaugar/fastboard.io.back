@@ -29,7 +29,4 @@ module.exports = {
   plugins : [
     new NodemonPlugin(),
   ],
-  externals : {
-    uws : 'uws',
-  },
 };
