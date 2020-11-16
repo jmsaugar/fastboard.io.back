@@ -17,8 +17,13 @@ function generateUserId() {
 
 // @todo
 function generateBoardId() {
-  // @todo generate boardId - cannot be 0? check restrictions on this
-  return '123456';
+  // return '123456';
+
+  const id = `${this.ids.all[this.ids.next]}`;
+
+  this.ids.next += 1;
+
+  return id.padStart(6, '0');
 }
 
 /**
@@ -31,7 +36,7 @@ function generateBoardId() {
 function createBoard(boardName) {
   Log.info('Service : Boards : createBoard', { boardName });
 
-  const boardId = generateBoardId();
+  const boardId = generateBoardId.call(this);
 
   const board = {
     name         : boardName,
