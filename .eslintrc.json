@@ -3,9 +3,16 @@
     "es2021": true,
     "node": true
   },
-  "extends": "airbnb-base",
+  "extends": [
+    "airbnb-base",
+    "plugin:jest/recommended",
+    "plugin:jest/style"
+  ],
   "parser": "@babel/eslint-parser",
-  "plugins": ["promise"],
+  "plugins": [
+    "promise",
+    "jest"
+  ],
   "parserOptions": {
     "ecmaVersion": 12,
     "sourceType": "module"
