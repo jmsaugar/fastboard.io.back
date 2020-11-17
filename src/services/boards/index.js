@@ -33,7 +33,10 @@ const init = () => {
   // Shuffle
   for (let i = serviceScope.ids.all.length - 1; i > 0; i -= 1) {
     const j = Math.floor(Math.random() * (i + 1));
-    [serviceScope.ids.all[i], serviceScope.ids.all[j]] = [serviceScope.ids.all[j], serviceScope.ids.all[i]];
+    [serviceScope.ids.all[i], serviceScope.ids.all[j]] = [
+      serviceScope.ids.all[j],
+      serviceScope.ids.all[i],
+    ];
   }
 };
 
