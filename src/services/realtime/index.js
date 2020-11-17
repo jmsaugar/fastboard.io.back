@@ -1,32 +1,14 @@
-import io from 'socket.io';
+import { injectDependencies, start } from './actions';
 
-import { Log } from '#utils';
+export default () => {
+  const scope = {
+    dependencies : {},
+    server       : {}, // Socketio server instance.
+    sockets      : {}, // socketId -> { boardId, socket }
+  };
 
-import { attachHandlers } from './utils';
-
-const init = () => {
-  Log.info('Service : Realtime : init');
-
-  const server = io(
-    process.env.SOCKETIO_PORT, {
-      serveClient : false,
-      cors        : {
-        origin      : process.env.FRONT_HOST,
-        credentials : true,
-      },
-    },
-  );
-
-  const serviceScope = Object.freeze({
-    server, // Socketio server instance.
-    sockets : {}, // socketId -> { boardId, socket }
+  return Object.freeze({
+    injectDependencies : injectDependencies.bind(scope),
+    start              : start.bind(scope),
   });
-
-  attachHandlers.call(serviceScope, server);
-
-  Log.info('Service : Realtime : init : listening');
-};
-
-export default {
-  init,
 };

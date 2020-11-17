@@ -1,8 +1,6 @@
 import { Log } from '#utils';
 import { boardsErrors } from '#constants';
 
-import boardsService from '../../boards';
-
 /**
  * Handler for board creation request.
  *
@@ -18,7 +16,7 @@ export default function onCreate(socket, { boardName, userName }, ack) {
   });
 
   // @todo check userName and boardName?
-  const boardId = boardsService.createBoard(boardName);
+  const boardId = this.dependencies.boardsService.createBoard(boardName);
 
   if (!boardId) {
     Log.error('Services : Realtime : onCreate : board not created');
@@ -32,7 +30,7 @@ export default function onCreate(socket, { boardName, userName }, ack) {
   Log.debug('Services : Realtime : onCreate : socket joined board', { boardId });
 
   // Add new user to board
-  const user = boardsService.addUser(boardId, userName, socket.id);
+  const user = this.dependencies.boardsService.addUser(boardId, userName, socket.id);
 
   if (!user) {
     Log.error('Services : Realtime : onCreate : user not added to board', { boardId, userName });

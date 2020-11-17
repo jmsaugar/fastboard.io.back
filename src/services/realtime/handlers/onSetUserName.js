@@ -1,8 +1,6 @@
 import { Log } from '#utils';
 import { boardsMessages } from '#constants';
 
-import boardsService from '../../boards';
-
 /**
  * Set the name of an user.
  *
@@ -19,7 +17,7 @@ export default function onSetUserName(socketId, userName, ack) {
   }
 
   const { boardId } = this.sockets[socketId];
-  const board = boardsService.getBoard(boardId);
+  const board = this.dependencies.boardsService.getBoard(boardId);
 
   if (!board) {
     ack(false);
@@ -27,7 +25,9 @@ export default function onSetUserName(socketId, userName, ack) {
   }
 
   // Get the user
-  const user = boardsService.getUsers(boardId).find((u) => u.socketId === socketId);
+  const user = this.dependencies.boardsService.getUsers(boardId).find(
+    (u) => u.socketId === socketId,
+  );
 
   const { socket } = this.sockets[socketId];
 
@@ -37,7 +37,7 @@ export default function onSetUserName(socketId, userName, ack) {
   }
 
   // Update user name
-  boardsService.updateUserName(boardId, user.id, userName);
+  this.dependencies.boardsService.updateUserName(boardId, user.id, userName);
 
   // Tell all other room users that another user has changed his name
   socket.to(boardId).emit(boardsMessages.didSetUserName, { userId : user.id, userName });

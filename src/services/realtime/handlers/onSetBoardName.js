@@ -1,8 +1,6 @@
 import { Log } from '#utils';
 import { boardsMessages } from '#constants';
 
-import boardsService from '../../boards';
-
 /**
  * Set the name of a board.
  *
@@ -19,7 +17,7 @@ export default function onSetBoardName(socketId, boardName, ack) {
   }
 
   const { boardId } = this.sockets[socketId];
-  const board = boardsService.getBoard(boardId);
+  const board = this.dependencies.boardsService.getBoard(boardId);
 
   if (!board) {
     ack(false);
@@ -34,7 +32,7 @@ export default function onSetBoardName(socketId, boardName, ack) {
   }
 
   // Update board name
-  boardsService.updateBoardName(boardId, boardName);
+  this.dependencies.boardsService.updateBoardName(boardId, boardName);
 
   // Tell all other room users that the board name has been changed
   socket.to(boardId).emit(boardsMessages.didSetBoardName, { boardId, boardName });

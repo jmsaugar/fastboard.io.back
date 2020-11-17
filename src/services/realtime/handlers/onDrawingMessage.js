@@ -1,7 +1,5 @@
 import { Log } from '#utils';
 
-import boardsService from '../../boards';
-
 /**
  * Handler for any drawing message.
  *
@@ -18,7 +16,7 @@ export default function onDrawingMessage(socketId, responseMessage, data) {
   }
 
   const { boardId, socket } = this.sockets[socketId];
-  const board = boardsService.getBoard(boardId);
+  const board = this.dependencies.boardsService.getBoard(boardId);
 
   if (!board) {
     Log.warning('Service : Realtime : onDrawingMessage : nonexistent board', { boardId });
@@ -30,7 +28,9 @@ export default function onDrawingMessage(socketId, responseMessage, data) {
     return;
   }
 
-  const userId = boardsService.getUsers(boardId).find((user) => user.socketId === socketId)?.id;
+  const userId = this.dependencies.boardsService.getUsers(boardId).find(
+    (user) => user.socketId === socketId,
+  )?.id;
 
   if (!userId) {
     Log.warning('Service : Realtime : onDrawingMessage : nonexistent user', { socketId });

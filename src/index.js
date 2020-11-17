@@ -10,6 +10,6 @@ Log.init(logPrefix, {
   debug   : process.env.NODE_ENV === envs.dev,
 });
 
-configService.init();
-boardsService.init();
-realtimeService.init();
+configService.start();
+boardsService.start();
+realtimeService.start();

@@ -1,3 +1,5 @@
+import io from 'socket.io';
+
 import { Log } from '#utils';
 import { boardsMessages, drawingsMessages, socketIOMessages } from '#constants';
 
@@ -10,9 +12,16 @@ import {
   onDrawingMessage,
 } from '../handlers';
 
-export default function attachHandlers(server) {
+/**
+ * Attach handlers to socket.io server based on message types.
+ *
+ * @param {Object} server Socket.io server to be attached handlers to.
+ */
+function attachHandlers(server) {
+  Log.info('Service : Realtime : attachHandlers');
+
   server.on(socketIOMessages.connection, (socket) => {
-    Log.info('Service : Realtime : init : connection', { socketId : socket.id });
+    Log.info('Service : Realtime : attachHandlers : socket connected', { socketId : socket.id });
 
     // Boards
     socket.on(socketIOMessages.disconnection, onDisconnect.bind(this, socket.id));
@@ -43,4 +52,25 @@ export default function attachHandlers(server) {
       onDrawingMessage.bind(this, socket.id, drawingsMessages.didClearBoard),
     );
   });
+}
+
+/**
+ * Start the realtime service.
+ */
+export default function start() {
+  Log.info('Service : Realtime : start');
+
+  this.server = io(
+    process.env.SOCKETIO_PORT, {
+      serveClient : false,
+      cors        : {
+        origin      : process.env.FRONT_HOST,
+        credentials : true,
+      },
+    },
+  );
+
+  attachHandlers.call(this, this.server);
+
+  Log.info('Service : Realtime : start : listening');
 }

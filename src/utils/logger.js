@@ -5,7 +5,7 @@ const colors = Object.freeze({
   debug   : '\x1b[36m', // Light blue
 });
 
-let prefix;
+let prefix = '';
 let config = {
   all     : true,
   info    : true,

@@ -1,8 +1,6 @@
 import { Log } from '#utils';
 import { boardsErrors, boardsMessages } from '#constants';
 
-import boardsService from '../../boards';
-
 /**
  * Handler for board join request.
  *
@@ -15,7 +13,7 @@ export default function onJoin(socket, { boardId, userName }, ack) {
     socketId : socket.id, boardId, userName,
   });
 
-  const board = boardsService.getBoard(boardId);
+  const board = this.dependencies.boardsService.getBoard(boardId);
 
   if (!board) {
     Log.error('Services : Realtime : onJoin : board does not exist');
@@ -29,7 +27,7 @@ export default function onJoin(socket, { boardId, userName }, ack) {
   Log.debug('Services : Realtime : onJoin : socket joined board', { boardId });
 
   // Add new user to board
-  const user = boardsService.addUser(boardId, userName, socket.id);
+  const user = this.dependencies.boardsService.addUser(boardId, userName, socket.id);
 
   if (!user) {
     Log.error('Services : Realtime : onJoin : user not added to board', { boardId, userName });
@@ -45,7 +43,9 @@ export default function onJoin(socket, { boardId, userName }, ack) {
   ack(true, {
     boardId,
     boardName : board.name,
-    users     : boardsService.getUsers(boardId).filter(({ socketId }) => socketId !== socket.id),
+    users     : this.dependencies.boardsService.getUsers(boardId).filter(
+      ({ socketId }) => socketId !== socket.id,
+    ),
   });
 
   // Tell all other room users that a new user has connected to the room
