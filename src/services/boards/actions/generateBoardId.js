@@ -1,13 +1,23 @@
 import { Log } from '#utils';
 
-// @todo
+/**
+ * Generate new, not currently used, board id.
+ *
+ * @return {String} Board id.
+ */
 export default function generateBoardId() {
-  // return '123456';
   Log.info('Service : Boards : generateBoardId');
 
-  const id = `${this.ids.all[this.ids.next]}`;
+  let id;
+  do {
+    if (this.ids.next >= this.ids.all.length) {
+      this.ids.next = 0;
+    }
 
-  this.ids.next += 1;
+    id = `${this.ids.all[this.ids.next]}`.padStart(6, '0');
 
-  return id.padStart(6, '0');
+    this.ids.next += 1;
+  } while (this.boards[id]);
+
+  return id;
 }
