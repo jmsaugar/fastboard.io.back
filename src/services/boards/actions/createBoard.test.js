@@ -3,15 +3,19 @@ import createBoard from './createBoard';
 const boardName = 'board name';
 
 describe('createBoard', () => {
-  test('Board is correctly created', () => {
-    const scope = {
+  let scope;
+
+  beforeEach(() => {
+    scope = {
       boards : {},
       ids    : {
         all  : [3, 1, 2],
         next : 0,
       },
     };
+  });
 
+  test('Board is correctly created', () => {
     const boardId = createBoard.call(scope, boardName);
 
     expect(scope.boards[boardId]).toBeDefined();

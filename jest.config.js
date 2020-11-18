@@ -5,4 +5,5 @@ module.exports = {
     '#constants' : '<rootDir>/src/constants',
     '#services'  : '<rootDir>/src/services',
   },
+  setupFiles : ['<rootDir>/devtools/setupTests.js'],
 };
