@@ -5,7 +5,7 @@ const existingBoardId = '123456';
 const nonExistentBoardId = '000123';
 const socketId = 123;
 
-describe('addUser', () => {
+describe('Boards service : addUser', () => {
   let scope;
 
   beforeEach(() => {

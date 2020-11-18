@@ -2,7 +2,7 @@ import { validate } from 'uuid';
 
 import generateUserId from './generateUserId';
 
-describe('generateUserId', () => {
+describe('Boards service : generateUserId', () => {
   test('New unique ids are correctly generated', () => {
     const id1 = generateUserId();
     const id2 = generateUserId();

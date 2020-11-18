@@ -3,7 +3,7 @@ import removeBoard from './removeBoard';
 const existingBoardId = '123456';
 const nonExistentBoardId = '000123';
 
-describe('removeBoard', () => {
+describe('Boards service : removeBoard', () => {
   let scope;
 
   beforeEach(() => {

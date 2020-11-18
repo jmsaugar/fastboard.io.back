@@ -6,7 +6,7 @@ const user = {
   name : 'user name',
 };
 
-describe('getUsers', () => {
+describe('Boards service : getUsers', () => {
   let scope;
 
   beforeEach(() => {

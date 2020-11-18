@@ -9,7 +9,7 @@ const user = {
   name : 'user name',
 };
 
-describe('removeUser', () => {
+describe('Boards service : removeUser', () => {
   let scope;
 
   beforeEach(() => {

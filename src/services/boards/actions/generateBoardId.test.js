@@ -2,7 +2,7 @@ import generateBoardId from './generateBoardId';
 
 const existingBoardId = '000002';
 
-describe('generateBoardId', () => {
+describe('Boards service : generateBoardId', () => {
   let scope;
 
   beforeEach(() => {

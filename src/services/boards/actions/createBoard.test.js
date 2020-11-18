@@ -2,7 +2,7 @@ import createBoard from './createBoard';
 
 const boardName = 'board name';
 
-describe('createBoard', () => {
+describe('Boards service : createBoard', () => {
   let scope;
 
   beforeEach(() => {

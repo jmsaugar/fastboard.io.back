@@ -4,7 +4,7 @@ const boardName = 'board name';
 const existingBoardId = '123456';
 const nonExistentBoardId = '000123';
 
-describe('getBoard', () => {
+describe('Boards service : getBoard', () => {
   let scope;
 
   beforeEach(() => {
