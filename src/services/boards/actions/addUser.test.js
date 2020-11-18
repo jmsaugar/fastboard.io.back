@@ -2,7 +2,7 @@ import addUser from './addUser';
 
 const userName = 'user name';
 const existingBoardId = '123456';
-const nonExistingBoardId = '000123';
+const nonExistentBoardId = '000123';
 const socketId = 123;
 
 describe('addUser', () => {
@@ -26,10 +26,10 @@ describe('addUser', () => {
     expect(newUser.socketId).toBe(socketId);
   });
 
-  test('User not added on nonexisting board', () => {
-    const newUser = addUser.call(scope, nonExistingBoardId, userName, socketId);
+  test('User not added on nonexistent board', () => {
+    const newUser = addUser.call(scope, nonExistentBoardId, userName, socketId);
 
     expect(newUser).toBeUndefined();
-    expect(scope.boards[nonExistingBoardId]).toBeUndefined();
+    expect(scope.boards[nonExistentBoardId]).toBeUndefined();
   });
 });
