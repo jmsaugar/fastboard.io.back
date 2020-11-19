@@ -31,7 +31,7 @@ describe('Realtime service : onJoin', () => {
     };
   });
 
-  test('Create board successfully', () => {
+  test('Join board successfully', () => {
     onJoin.call(scope, socket, { boardId, userName }, ack);
 
     expect(ack).toHaveBeenCalledTimes(1);
