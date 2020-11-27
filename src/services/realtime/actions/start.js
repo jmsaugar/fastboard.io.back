@@ -40,6 +40,10 @@ function attachHandlers(server) {
       onDrawingMessage.bind(this, socket.id, drawingsMessages.didMouseDrag),
     );
     socket.on(
+      drawingsMessages.doMouseUp,
+      onDrawingMessage.bind(this, socket.id, drawingsMessages.didMouseUp),
+    );
+    socket.on(
       drawingsMessages.doKeyDown,
       onDrawingMessage.bind(this, socket.id, drawingsMessages.didKeyDown),
     );
