@@ -76,5 +76,5 @@ export default function start() {
 
   attachHandlers.call(this, this.server);
 
-  Log.info('Service : Realtime : start : listening');
+  Log.info('Service : Realtime : start : listening : port', process.env.SOCKETIO_PORT);
 }
