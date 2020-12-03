@@ -67,6 +67,7 @@ export default function start() {
   this.server = io(
     process.env.SOCKETIO_PORT, {
       serveClient : false,
+      path        : process.env.SOCKETIO_PATH,
       cors        : {
         origin      : process.env.FRONT_HOST,
         credentials : true,
