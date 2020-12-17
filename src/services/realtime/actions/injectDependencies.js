@@ -7,7 +7,7 @@
  */
 export default function injectDependencies({ boardsService }) {
   if (!boardsService) {
-    throw new Error('Services : Realtime : injectDependencies : missing dependencies');
+    throw new Error('Service : Realtime : injectDependencies : missing dependencies');
   }
 
   this.dependencies = {

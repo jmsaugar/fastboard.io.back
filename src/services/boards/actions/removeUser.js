@@ -9,12 +9,12 @@ import { Log } from '#utils';
  * @return {Integer} Number of users still on the board.
  */
 export default function removeUser(boardId, userId) {
-  Log.info('Services : Boards : removeUser', { boardId, userId });
+  Log.info('Service : Boards : removeUser', { boardId, userId });
 
   const board = this.boards[boardId];
 
   if (!board) {
-    Log.warning('Services : Boards : removeUser : tried to remove an user from a nonexistent board', { boardId });
+    Log.warning('Service : Boards : removeUser : tried to remove an user from a nonexistent board', { boardId });
     return undefined;
   }
 

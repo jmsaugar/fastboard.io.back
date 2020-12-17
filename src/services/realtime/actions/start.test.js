@@ -18,6 +18,8 @@ describe('Realtime service : start', () => {
     scope = {
       server : undefined,
     };
+
+    io.mockClear();
   });
 
   test('Start service', () => {

@@ -10,7 +10,7 @@ import { Log } from '#utils';
 export default function generateUserId() {
   const userId = uuidv4();
 
-  Log.debug('Services : Boards : generateUserId', { userId });
+  Log.debug('Service : Boards : generateUserId', { userId });
 
   return userId;
 }

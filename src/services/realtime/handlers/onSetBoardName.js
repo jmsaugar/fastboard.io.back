@@ -9,7 +9,7 @@ import { boardsMessages } from '#constants';
  * @param {Function} ack Callback to acknowledge the request
  */
 export default function onSetBoardName(socketId, boardName, ack) {
-  Log.info('Services : Realtime : onSetBoardName', { socketId, boardName });
+  Log.info('Service : Realtime : onSetBoardName', { socketId, boardName });
 
   if (!this.sockets[socketId]) {
     ack(false);

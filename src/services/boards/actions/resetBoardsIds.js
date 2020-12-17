@@ -6,7 +6,7 @@ import { Log } from '#utils';
  * @param {Integer} maxId Max allowed board id
  */
 export default function resetBoardsIds(maxId) {
-  Log.info('Services : Boards : resetIds');
+  Log.info('Service : Boards : resetIds');
 
   this.ids.all = [];
   this.ids.next = 0;

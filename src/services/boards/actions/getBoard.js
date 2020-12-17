@@ -8,12 +8,12 @@ import { Log } from '#utils';
  * @return {Object} Board data { name, creationDate }
  */
 export default function getBoard(boardId) {
-  Log.info('Services : Boards : getBoard', { boardId });
+  Log.info('Service : Boards : getBoard', { boardId });
 
   const board = this.boards[boardId];
 
   if (!board) {
-    Log.warning('Services : Boards : getBoard : tried to get a nonexistent board', { boardId });
+    Log.warning('Service : Boards : getBoard : tried to get a nonexistent board', { boardId });
     return undefined;
   }
 

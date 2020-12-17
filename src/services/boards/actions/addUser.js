@@ -17,7 +17,7 @@ export default function addUser(boardId, userName, socketId) {
   const board = this.boards[boardId];
 
   if (!board) {
-    Log.warning('Services : Boards : addUser : tried add an user to a nonexistent board', { boardId });
+    Log.warning('Service : Boards : addUser : tried add an user to a nonexistent board', { boardId });
     return undefined;
   }
 

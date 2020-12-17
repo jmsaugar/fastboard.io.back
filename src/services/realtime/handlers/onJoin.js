@@ -9,14 +9,14 @@ import { boardsErrors, boardsMessages } from '#constants';
  * @param {Function} ack Callback to acknowledge the join request
  */
 export default function onJoin(socket, { boardId, userName }, ack) {
-  Log.info('Services : Realtime : onJoin', {
+  Log.info('Service : Realtime : onJoin', {
     socketId : socket.id, boardId, userName,
   });
 
   const board = this.dependencies.boardsService.getBoard(boardId);
 
   if (!board) {
-    Log.error('Services : Realtime : onJoin : board does not exist');
+    Log.error('Service : Realtime : onJoin : board does not exist');
 
     ack(false, { errorCode : boardsErrors.noBoard }); // @todo error payload generator?
     return;
@@ -24,13 +24,13 @@ export default function onJoin(socket, { boardId, userName }, ack) {
 
   socket.join(boardId);
 
-  Log.debug('Services : Realtime : onJoin : socket joined board', { boardId });
+  Log.debug('Service : Realtime : onJoin : socket joined board', { boardId });
 
   // Add new user to board
   const user = this.dependencies.boardsService.addUser(boardId, userName, socket.id);
 
   if (!user) {
-    Log.error('Services : Realtime : onJoin : user not added to board', { boardId, userName });
+    Log.error('Service : Realtime : onJoin : user not added to board', { boardId, userName });
 
     ack(false, boardsErrors.generic);
     return;

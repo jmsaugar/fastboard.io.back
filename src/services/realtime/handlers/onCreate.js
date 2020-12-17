@@ -11,7 +11,7 @@ import { boardsErrors } from '#constants';
  * @param {Function} ack Callback to acknowledge the creation request
  */
 export default function onCreate(socket, { boardName, userName }, ack) {
-  Log.info('Services : Realtime : onCreate', {
+  Log.info('Service : Realtime : onCreate', {
     socketId : socket.id, boardName, userName,
   });
 
@@ -19,7 +19,7 @@ export default function onCreate(socket, { boardName, userName }, ack) {
   const boardId = this.dependencies.boardsService.createBoard(boardName);
 
   if (!boardId) {
-    Log.error('Services : Realtime : onCreate : board not created');
+    Log.error('Service : Realtime : onCreate : board not created');
 
     ack(false, { errorCode : boardsErrors.generic }); // @todo error payload generator?
     return;
@@ -27,13 +27,13 @@ export default function onCreate(socket, { boardName, userName }, ack) {
 
   socket.join(boardId);
 
-  Log.debug('Services : Realtime : onCreate : socket joined board', { boardId });
+  Log.debug('Service : Realtime : onCreate : socket joined board', { boardId });
 
   // Add new user to board
   const user = this.dependencies.boardsService.addUser(boardId, userName, socket.id);
 
   if (!user) {
-    Log.error('Services : Realtime : onCreate : user not added to board', { boardId, userName });
+    Log.error('Service : Realtime : onCreate : user not added to board', { boardId, userName });
 
     // @todo remove board?
 

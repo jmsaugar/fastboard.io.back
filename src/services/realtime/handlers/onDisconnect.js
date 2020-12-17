@@ -7,7 +7,7 @@ import { boardsMessages } from '#constants';
  * @param {String} socketId Id of the socket for the disconnected user.
  */
 export default function onDisconnect(socketId) {
-  Log.info('Services : Realtime : onDisconnect', { socketId });
+  Log.info('Service : Realtime : onDisconnect', { socketId });
 
   if (!this.sockets[socketId]) {
     return;
