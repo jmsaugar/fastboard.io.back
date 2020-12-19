@@ -1,0 +1,11 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "#constants"  : ["src/constants"],
+      "#services"   : ["src/services"],
+      "#utils"      : ["src/utils"]
+    },
+  },
+  "exclude": ["node_modules", "dist"]
+}
