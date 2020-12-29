@@ -1,4 +1,4 @@
-import { Log } from '#utils';
+import { Log, BoardError } from '#utils';
 import { boardsErrors, boardsMessages } from '#constants';
 
 /**
@@ -18,7 +18,7 @@ export default function onJoin(socket, { boardId, userName }, ack) {
   if (!board) {
     Log.error('Service : Realtime : onJoin : board does not exist');
 
-    ack(false, { errorCode : boardsErrors.noBoard }); // @todo error payload generator?
+    ack(false, new BoardError(boardsErrors.noBoard));
     return;
   }
 
@@ -32,7 +32,7 @@ export default function onJoin(socket, { boardId, userName }, ack) {
   if (!user) {
     Log.error('Service : Realtime : onJoin : user not added to board', { boardId, userName });
 
-    ack(false, boardsErrors.generic);
+    ack(false, new BoardError(boardsErrors.generic));
     return;
   }
 

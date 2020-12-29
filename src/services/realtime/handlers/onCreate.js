@@ -1,4 +1,4 @@
-import { Log } from '#utils';
+import { Log, BoardError } from '#utils';
 import { boardsErrors } from '#constants';
 
 /**
@@ -21,7 +21,7 @@ export default function onCreate(socket, { boardName, userName }, ack) {
   if (!boardId) {
     Log.error('Service : Realtime : onCreate : board not created');
 
-    ack(false, { errorCode : boardsErrors.generic }); // @todo error payload generator?
+    ack(false, new BoardError(boardsErrors.generic));
     return;
   }
 
@@ -37,7 +37,7 @@ export default function onCreate(socket, { boardName, userName }, ack) {
 
     // @todo remove board?
 
-    ack(false, boardsErrors.generic);
+    ack(false, new BoardError(boardsErrors.generic));
     return;
   }
 
