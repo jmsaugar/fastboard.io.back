@@ -31,9 +31,9 @@
           ["#utils", "./src/utils"],
           ["#constants", "./src/constants"],
           ["#services", "./src/services"]
-        ]
-      },
-      "extensions": [".js"]
+        ],
+        "extensions": [".js"]
+      }
     }
   }
 }
