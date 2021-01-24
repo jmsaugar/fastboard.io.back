@@ -45,5 +45,5 @@ export default function onCreate(socket, { boardName, userName }, ack) {
   this.sockets[socket.id] = { boardId, socket };
 
   // Confirm the user he has created and joined the room
-  ack(true, { boardId, boardName });
+  ack(true, { boardId, boardName, joinDate : user.joinDate });
 }

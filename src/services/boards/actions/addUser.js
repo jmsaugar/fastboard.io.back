@@ -23,8 +23,9 @@ export default function addUser(boardId, userName, socketId) {
 
   // Create a new user
   const newUser = {
-    id   : generateUserId(),
-    name : userName,
+    id       : generateUserId(),
+    joinDate : new Date(),
+    name     : userName,
     socketId,
   };
 

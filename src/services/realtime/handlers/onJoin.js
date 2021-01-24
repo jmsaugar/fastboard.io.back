@@ -43,11 +43,19 @@ export default function onJoin(socket, { boardId, userName }, ack) {
   ack(true, {
     boardId,
     boardName : board.name,
+    joinDate  : user.joinDate,
     users     : this.dependencies.boardsService.getUsers(boardId).filter(
       ({ socketId }) => socketId !== socket.id,
     ),
   });
 
   // Tell all other room users that a new user has connected to the room
-  socket.to(boardId).emit(boardsMessages.didJoin, { userId : user.id, userName });
+  socket.to(boardId).emit(
+    boardsMessages.didJoin,
+    {
+      userId   : user.id,
+      joinDate : user.joinDate,
+      userName,
+    },
+  );
 }
