@@ -55,6 +55,18 @@ function attachHandlers(server) {
       drawingsMessages.doClearBoard,
       onDrawingMessage.bind(this, socket.id, drawingsMessages.didClearBoard),
     );
+    socket.on(
+      drawingsMessages.doRemoveItem,
+      onDrawingMessage.bind(this, socket.id, drawingsMessages.didRemoveItem),
+    );
+    socket.on(
+      drawingsMessages.doBringItemForward,
+      onDrawingMessage.bind(this, socket.id, drawingsMessages.didBringItemForward),
+    );
+    socket.on(
+      drawingsMessages.doSendItemBackward,
+      onDrawingMessage.bind(this, socket.id, drawingsMessages.didSendItemBackward),
+    );
   });
 }
 
