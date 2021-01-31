@@ -67,6 +67,14 @@ function attachHandlers(server) {
       drawingsMessages.doSendItemBackward,
       onDrawingMessage.bind(this, socket.id, drawingsMessages.didSendItemBackward),
     );
+    socket.on(
+      drawingsMessages.doSelectItem,
+      onDrawingMessage.bind(this, socket.id, drawingsMessages.didSelectItem),
+    );
+    socket.on(
+      drawingsMessages.doOperateItem,
+      onDrawingMessage.bind(this, socket.id, drawingsMessages.didOperateItem),
+    );
   });
 }
 
