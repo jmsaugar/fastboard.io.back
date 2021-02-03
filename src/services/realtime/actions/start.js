@@ -75,6 +75,18 @@ function attachHandlers(server) {
       drawingsMessages.doOperateItem,
       onDrawingMessage.bind(this, socket.id, drawingsMessages.didOperateItem),
     );
+    socket.on(
+      drawingsMessages.doCreateText,
+      onDrawingMessage.bind(this, socket.id, drawingsMessages.didCreateText),
+    );
+    socket.on(
+      drawingsMessages.doUpdateText,
+      onDrawingMessage.bind(this, socket.id, drawingsMessages.didUpdateText),
+    );
+    socket.on(
+      drawingsMessages.doUnselectText,
+      onDrawingMessage.bind(this, socket.id, drawingsMessages.didUnselectText),
+    );
   });
 }
 
