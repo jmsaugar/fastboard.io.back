@@ -18,6 +18,7 @@ export default function createBoard(boardName) {
     name         : boardName,
     creationDate : new Date(),
     users        : [],
+    images       : [],
   };
 
   this.boards[boardId] = board;

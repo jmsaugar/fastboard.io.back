@@ -1,14 +1,14 @@
-import io from 'socket.io';
+import { Server } from 'socket.io';
 
 import start from './start';
 
 jest.mock(
   'socket.io',
-  () => jest.fn(() => ({
-    __esModule : true,
-    default    : jest.fn(),
-    on         : jest.fn(),
-  })),
+  () => ({
+    Server : jest.fn().mockImplementation(() => ({
+      on : jest.fn(),
+    })),
+  }),
 );
 
 describe('Realtime service : start', () => {
@@ -16,16 +16,19 @@ describe('Realtime service : start', () => {
 
   beforeEach(() => {
     scope = {
+      dependencies : {
+        httpService : {
+          getServer : jest.fn(),
+        },
+      },
       server : undefined,
     };
-
-    io.mockClear();
   });
 
   test('Start service', () => {
     start.call(scope);
 
-    expect(io).toHaveBeenCalledTimes(1);
-    expect(io.mock.results[0].value.on).toHaveBeenCalledTimes(1);
+    expect(Server).toHaveBeenCalledTimes(1);
+    expect(Server.mock.results[0].value.on).toHaveBeenCalledTimes(1);
   });
 });

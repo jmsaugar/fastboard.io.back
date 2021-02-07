@@ -1,6 +1,12 @@
 import { Log } from '#utils';
 import { logPrefix, envs } from '#constants';
-import { configService, boardsService, realtimeService } from '#services';
+import {
+  configService,
+  boardsService,
+  httpService,
+  realtimeService,
+  storageService,
+} from '#services';
 
 Log.init(logPrefix, {
   all     : false,
@@ -12,4 +18,6 @@ Log.init(logPrefix, {
 
 configService.start();
 boardsService.start();
+httpService.start();
 realtimeService.start();
+storageService.start();

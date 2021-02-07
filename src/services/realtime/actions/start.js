@@ -1,4 +1,4 @@
-import io from 'socket.io';
+import { Server } from 'socket.io';
 
 import { Log } from '#utils';
 import { boardsMessages, drawingsMessages, socketIOMessages } from '#constants';
@@ -96,8 +96,9 @@ function attachHandlers(server) {
 export default function start() {
   Log.info('Service : Realtime : start');
 
-  this.server = io(
-    process.env.SOCKETIO_PORT, {
+  this.server = new Server(
+    this.dependencies.httpService.getServer(),
+    {
       serveClient : false,
       path        : process.env.SOCKETIO_PATH,
       cors        : {
@@ -109,5 +110,5 @@ export default function start() {
 
   attachHandlers.call(this, this.server);
 
-  Log.info('Service : Realtime : start : listening : port', process.env.SOCKETIO_PORT);
+  Log.info('Service : Realtime : start : listening', process.env.SERVER_PORT);
 }

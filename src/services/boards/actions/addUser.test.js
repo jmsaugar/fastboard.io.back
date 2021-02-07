@@ -26,7 +26,7 @@ describe('Boards service : addUser', () => {
     expect(newUser.socketId).toBe(socketId);
   });
 
-  test('User not added on nonexistent board', () => {
+  test('User not added to nonexistent board', () => {
     const newUser = addUser.call(scope, nonExistentBoardId, userName, socketId);
 
     expect(newUser).toBeUndefined();

@@ -1,7 +1,6 @@
 import injectDependencies from './injectDependencies';
 
-const boardsService = {};
-const httpService = {};
+const storageService = {};
 const unusedDependency = {};
 
 describe('Realtime service : injectDependencies', () => {
@@ -14,17 +13,15 @@ describe('Realtime service : injectDependencies', () => {
   });
 
   test('Dependencies correctly injected', () => {
-    injectDependencies.call(scope, { boardsService, httpService });
+    injectDependencies.call(scope, { storageService });
 
-    expect(scope.dependencies.boardsService).toBe(boardsService);
-    expect(scope.dependencies.httpService).toBe(httpService);
+    expect(scope.dependencies.storageService).toBe(storageService);
   });
 
   test('Inject both correct and unrequired dependency', () => {
-    injectDependencies.call(scope, { boardsService, httpService, unusedDependency });
+    injectDependencies.call(scope, { storageService, unusedDependency });
 
-    expect(scope.dependencies.boardsService).toBe(boardsService);
-    expect(scope.dependencies.httpService).toBe(httpService);
+    expect(scope.dependencies.storageService).toBe(storageService);
     expect(scope.dependencies.unusedDependency).toBeUndefined();
   });
 
