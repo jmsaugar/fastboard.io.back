@@ -10,6 +10,7 @@ import {
   onSetUserName,
   onSetBoardName,
   onDrawingMessage,
+  onBoardState,
 } from '../handlers';
 
 /**
@@ -86,6 +87,10 @@ function attachHandlers(server) {
     socket.on(
       drawingsMessages.doUnselectText,
       onDrawingMessage.bind(this, socket.id, drawingsMessages.didUnselectText),
+    );
+    socket.on(
+      drawingsMessages.doSendBoardState,
+      onBoardState.bind(this, socket.id, drawingsMessages.didSendBoardState),
     );
   });
 }
