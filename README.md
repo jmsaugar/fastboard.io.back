@@ -32,11 +32,19 @@ To launch the project locally and be able to use it, you will want to have the f
 
 Copy the file `env.template` into a new one called `env`. There you will be able to set those environment variables:
 
-- `SOCKETIO_PORT` The port on which Socket.io will listen(e.g. `9000`).
+- `SERVER_PORT` The port on which the server will listen(e.g. `9000`).
 
-- `SOCKETIO_PATH` The path to be used in the socket.io connection. This has to be the same as configured in the frontend project (e.g. `/`).
+- `SOCKETIO_PATH` The path to be used in the socket.io connection. This has to be the same as configured in the frontend project (e.g. `/socket`).
 
 - `FRONT_HOST` The host on which the front app will be served. This will be use by Socket.io for CORS configuration (e.g.http://localhost:3000).
+
+- `STORAGE_ENDPOINT` Endpoint for the AWS-compatible storage.
+
+- `STORAGE_ACCESS_KEY` Access key for the AWS-compatible storage.
+
+- `STORAGE_SECRET_KEY` Secret key for the AWS-compatible storage.
+
+- `STORAGE_BUCKET_NAME` Bucket name for the AWS-compatible storage.
 
 #### Install dependencies
 
