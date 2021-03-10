@@ -7,7 +7,7 @@ import { Log } from '#utils';
  * @param {String} responseMessage Message type to be sent to target user in the board.
  * @param {Object} data Board state and user id to be sent to { userId, state }
  */
-export default function onBoardState(socketId, responseMessage, data) {
+export default function onBoardState(socketId, responseMessage, data, ack) {
   Log.debug('Service : Realtime : onBoardState', { userId : data.userId });
 
   if (!data.userId || !data.state) {
@@ -37,8 +37,7 @@ export default function onBoardState(socketId, responseMessage, data) {
     return;
   }
 
-  // this.sockets[userSocketId].emit(responseMessage, { state : data.state });
   socket.to(userSocketId).emit(responseMessage, { state : data.state });
 
-  // @todo ack?
+  ack(true);
 }
