@@ -1,9 +1,13 @@
 const path = require('path');
 const NodemonPlugin = require('nodemon-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = {
   target : 'node',
   entry  : './src/index.js',
+  optimization : {
+    minimizer : [new TerserPlugin()],
+  },
   output : {
     path     : path.resolve(__dirname, 'dist'),
     filename : 'bundle.js',
